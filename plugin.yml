@@ -24,7 +24,7 @@ marketplace:
   homepage: https://chris-peterson.github.io/sonar/#/
 
 suite:
-  group: bearings
+  group: passage
   activations: [user]
   gloss: "sonar: ping for what you're looking for."
   pitch: "Know it's in there somewhere? Send a ping. Shallow matches come back right away; deeper ones by your next turn."

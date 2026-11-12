@@ -1,0 +1,9 @@
+# docs/ is rendered by `just docs` and CI (shipyard build-docs); only the
+# hand-written pages are tracked.
+docs/*
+!docs/_sidebar.md
+!docs/.nojekyll
+!docs/README.md
+
+__pycache__
+.DS_Store

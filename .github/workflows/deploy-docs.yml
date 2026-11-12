@@ -1,0 +1,14 @@
+name: Deploy docs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: chris-peterson/shipyard/.github/workflows/deploy-docs.yml@v2

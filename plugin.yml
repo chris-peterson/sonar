@@ -1,0 +1,37 @@
+# Canonical descriptor for the sonar plugin: edit here, never plugin.json.
+# shipyard's project job projects this into .claude-plugin/plugin.json and the
+# marketplace catalog (the suite: block), and commits the result to the branch.
+
+name: sonar
+version: 0.0.1
+description: "Pings what a session can reach for the thing you're looking for: quick shallow matches first, then deeper results from history, sibling repos, links, and past transcripts."
+author: chris-peterson
+repository: https://github.com/chris-peterson/sonar
+icon: .claude-plugin/icon.svg
+license: MIT
+keywords: [context, search, discovery, history, transcripts, claude-code]
+
+validate:
+  accept:
+    - warning: root
+      path: CLAUDE.md
+      because: >-
+        CLAUDE.md at the root is this repo's own agent instructions, not context
+        the plugin ships. It points at AGENTS.md, which every agent reads.
+
+marketplace:
+  category: development
+  homepage: https://chris-peterson.github.io/sonar/#/
+
+suite:
+  group: bearings
+  gloss: "sonar: ping for what you're looking for."
+  pitch: "Know it's in there somewhere? Send a ping. Shallow matches come back right away; deeper ones by your next turn."
+  what: "Searches everything a session can reach for what you're after: the files it has loaded, the ones they lead to, sibling repos, git history, links, and past transcripts. It answers with the shallow matches right away and keeps listening while you work, then hands over what else turned up when your next turn starts, along with anything it noticed on the way: an orphaned file, a path too deep to reach, a dead link."
+  # >>> shipyard:describe — generated from source by `shipyard gen-describe`; do not edit >>>
+  describe: {}
+  # <<< shipyard:describe <<<
+
+docs:
+  code_languages: [bash, yaml, json]
+  mermaid: false

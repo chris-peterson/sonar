@@ -1,0 +1,31 @@
+name: Project
+
+# shipyard's project action regenerates .claude-plugin/plugin.json and plugin.yml's
+# suite.describe block from their sources and commits the result to the branch.
+# Rendered docs/ is git-ignored and built fresh by the docs deploy.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  project:
+    runs-on: ubuntu-latest
+    # A fork's token is read-only, so its push would fail; the maintainer's own
+    # push projects instead.
+    if: >-
+      github.event_name != 'pull_request'
+      || github.event.pull_request.head.repo.full_name == github.repository
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # The default pull_request checkout is a detached merge commit, with no
+          # branch to push the projection to.
+          ref: ${{ github.head_ref }}
+
+      - uses: chris-peterson/shipyard/actions/project@v2

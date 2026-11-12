@@ -1,0 +1,27 @@
+name: Release
+
+# shipyard derives the version from plugin.yml, retitles CHANGELOG.md's
+# `## Unreleased` section to it, commits, tags that commit, publishes the
+# release, and deploys the docs from the tag. Write the notes before
+# dispatching; secrets: inherit passes MARKETPLACE_DISPATCH_TOKEN through.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: How far to advance the version
+        required: true
+        type: choice
+        options: [patch, minor, major]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  release:
+    uses: chris-peterson/shipyard/.github/workflows/release.yml@v2
+    with:
+      bump: ${{ inputs.bump }}
+    secrets: inherit

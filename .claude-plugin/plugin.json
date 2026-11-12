@@ -1,0 +1,21 @@
+{
+  "name": "sonar",
+  "version": "0.0.1",
+  "description": "Pings what a session can reach for the thing you're looking for: quick shallow matches first, then deeper results from history, sibling repos, links, and past transcripts.",
+  "author": {
+    "name": "chris-peterson"
+  },
+  "repository": "https://github.com/chris-peterson/sonar",
+  "license": "MIT",
+  "keywords": [
+    "context",
+    "search",
+    "discovery",
+    "history",
+    "transcripts",
+    "claude-code"
+  ],
+  "homepage": "https://chris-peterson.github.io/sonar/#/",
+  "icon": ".claude-plugin/icon.svg",
+  "documentationUrl": "https://chris-peterson.github.io/sonar/#/"
+}

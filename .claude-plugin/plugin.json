@@ -1,6 +1,6 @@
 {
   "name": "sonar",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Pings what a session can reach for the thing you're looking for: quick shallow matches first, then deeper results from history, sibling repos, links, and past transcripts.",
   "author": {
     "name": "chris-peterson"

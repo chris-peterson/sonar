@@ -19,6 +19,11 @@ check-generated:
     {{shipyard}} generate
     git --no-pager diff --stat
 
+# Run the script's tests (stdlib unittest, no dependencies)
+[group('check your work')]
+test:
+    python3 -m unittest discover -s tests -v
+
 # Check the plugin the way the projection job does (needs `claude` on PATH)
 [group('check your work')]
 validate:

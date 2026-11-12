@@ -25,13 +25,16 @@ marketplace:
 
 suite:
   group: bearings
+  activations: [user]
   gloss: "sonar: ping for what you're looking for."
   pitch: "Know it's in there somewhere? Send a ping. Shallow matches come back right away; deeper ones by your next turn."
-  what: "Searches everything a session can reach for what you're after: the files it has loaded, the ones they lead to, sibling repos, git history, links, and past transcripts. It answers with the shallow matches right away and keeps listening while you work, then hands over what else turned up when your next turn starts, along with anything it noticed on the way: an orphaned file, a path too deep to reach, a dead link."
+  what: "Searches everything a session can reach for what you're after: the files it has loaded, the ones they lead to, sibling repos, git history, links, and past transcripts. It answers with the shallow matches right away and keeps listening while you work, then hands over what else turned up when your next turn starts, along with anything it noticed on the way, such as a link to a local file that isn't there."
+  cmds:
+    - ["/sonar:pulse", "Look for something: shallow matches now, deeper ones next turn"]
   # >>> shipyard:describe — generated from source by `shipyard gen-describe`; do not edit >>>
   describe: {}
   # <<< shipyard:describe <<<
 
 docs:
-  code_languages: [bash, yaml, json]
+  code_languages: [bash, yaml, json, python]
   mermaid: false

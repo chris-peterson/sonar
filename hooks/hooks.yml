@@ -1,0 +1,6 @@
+# Source of record for sonar's hooks; shipyard generates hooks.json.
+hooks:
+  - event: UserPromptSubmit
+    command: 'python3 "${CLAUDE_PLUGIN_ROOT}/scripts/sonar" hook UserPromptSubmit'
+    timeout: 5
+    description: Hands the deeper results of this session's last /sonar:pulse to the model once, when the next prompt arrives; says nothing when there are none.

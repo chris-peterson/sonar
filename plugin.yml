@@ -32,7 +32,11 @@ suite:
   cmds:
     - ["/sonar:pulse", "Look for something: shallow matches now, deeper ones next turn"]
   # >>> shipyard:describe — generated from source by `shipyard gen-describe`; do not edit >>>
-  describe: {}
+  describe:
+    skills:
+      pulse: This skill should be used when the user is looking for something they know exists but can't place, as a quick aside mid-conversation, such as "/sonar:pulse that retry guide", "where did I see the note about X", "I know we decided this somewhere", "find that thing about Y", or "didn't we talk about this in another session?".
+    hooks:
+      hooks: 'Hook wiring: UserPromptSubmit→sonar CLI.'
   # <<< shipyard:describe <<<
 
 docs:

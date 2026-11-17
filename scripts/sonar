@@ -1121,26 +1121,38 @@ def cmd_pulse(args) -> int:
     now = time.time()
     prune(now)
     results, _ = state_paths(sid)
-    write_json(results, {
-        "search_id": search_id, "session": sid, "query": terms, "root": str(root),
-        "paths": [str(p) for p in paths], "started_at": now, "budget": args.budget,
-        "status": "running", "sources_done": [], "hits": [], "notices": [],
-        "shallow": [hit_key(h) for h in hits],
-    })
+    # The sandbox (Claude Code 2.1.326+) can refuse writes under ~/.claude. The
+    # shallow results are already printed; say why the deep pass didn't start
+    # instead of ending on a traceback.
+    try:
+        write_json(results, {
+            "search_id": search_id, "session": sid, "query": terms, "root": str(root),
+            "paths": [str(p) for p in paths], "started_at": now, "budget": args.budget,
+            "status": "running", "sources_done": [], "hits": [], "notices": [],
+            "shallow": [hit_key(h) for h in hits],
+        })
+        err = open(state_dir() / f"{sid}.log", "w")
+    except OSError as e:
+        print(f"deeper search not started: can't write {state_dir()} "
+              f"({e.strerror or e}); under the sandbox, add that folder to "
+              "`sandbox.filesystem.allowWrite` in ~/.claude/settings.json.")
+        return 0
     cmd = [sys.executable, str(Path(__file__).resolve()), "deep", "--session", sid,
            "--search-id", search_id, "--budget", str(args.budget)]
     for p in paths:
         cmd += ["--path", str(p)]
     cmd += ["--", *terms]
-    log = state_dir() / f"{sid}.log"
-    with open(log, "w") as err:
+    with err:
         proc = subprocess.Popen(cmd, cwd=str(root), stdin=subprocess.DEVNULL,
                                 stdout=subprocess.DEVNULL, stderr=err,
                                 start_new_session=True, close_fds=True)
     state = read_json(results) or {}
     state["pid"] = proc.pid
     if state.get("search_id") == search_id:
-        write_json(results, state)
+        try:
+            write_json(results, state)
+        except OSError:
+            pass
     print("deeper search running (files these lead to, up to two hops out; git history; "
           "past sessions; sibling repos); what it finds arrives with your next prompt.")
     return 0

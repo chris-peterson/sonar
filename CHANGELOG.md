@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- **`/sonar:pulse` keeps its shallow results when it can't save state.** Since
+  Claude Code 2.1.326 the Bash sandbox can refuse writes under `~/.claude`,
+  where sonar keeps each session's deeper search. Pulse used to print the
+  shallow matches and then a traceback; now it prints them, says in one line
+  that the deeper search didn't start and which folder it couldn't write, and
+  points at `sandbox.filesystem.allowWrite` in `~/.claude/settings.json`.
+
 ## 0.1.0
 
 ### Added

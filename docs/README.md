@@ -58,3 +58,9 @@ are shown without their query strings.
 
 Results are kept per session under Claude Code's plugin data directory and
 removed after seven days.
+
+If Claude Code's Bash sandbox won't let sonar write that directory
+(`~/.claude/plugins/data/sonar-<marketplace>/pulse/`), you still get the
+shallow matches, followed by one line saying the deeper search didn't start
+and which folder it couldn't write. To let it run, add that folder to
+`sandbox.filesystem.allowWrite` in `~/.claude/settings.json`.

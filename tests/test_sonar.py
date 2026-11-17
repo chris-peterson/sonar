@@ -563,6 +563,25 @@ class CliTest(SonarCase):
         self.assertEqual(out.returncode, 0, out.stderr)
         self.assertIn("deeper search not started", out.stdout)
 
+    @unittest.skipIf(hasattr(os, "geteuid") and os.geteuid() == 0, "root ignores file modes")
+    def test_pulse_with_an_unwritable_state_dir_keeps_the_shallow_results(self):
+        repo = make_repo(self.tmp / "app", {"a.md": "retry budget\n"})
+        self.state.mkdir()
+        self.state.chmod(0o500)
+        env = {**os.environ, "CLAUDE_CODE_SESSION_ID": "ro-session"}
+        try:
+            out = subprocess.run([sys.executable, str(SONAR), "pulse", "--", "retry"],
+                                 cwd=repo, env=env, capture_output=True, text=True, timeout=30)
+        finally:
+            self.state.chmod(0o700)
+        self.assertEqual(out.returncode, 0, out.stderr)
+        self.assertNotIn("Traceback", out.stderr)
+        self.assertIn("a.md:1", out.stdout)
+        last = out.stdout.strip().splitlines()[-1]
+        self.assertIn(f"deeper search not started: can't write {self.state}", last)
+        self.assertIn("sandbox.filesystem.allowWrite", last)
+        self.assertIn("~/.claude/settings.json", last)
+
 
 if __name__ == "__main__":
     unittest.main()

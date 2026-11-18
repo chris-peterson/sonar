@@ -461,6 +461,9 @@ def _inside(path: Path, root: Path) -> bool:
 _LOAD_TOOLS = {"Read": "file_path", "Edit": "file_path", "MultiEdit": "file_path",
                "Write": "file_path", "NotebookEdit": "notebook_path"}
 _AT_MENTION = re.compile(r"(?<![\w@])@((?:~|\.{1,2})?/?[\w.-]+(?:/[\w.-]+)*)")
+# Claude Code looks up only a message's first 100 @-mentions as files (2.1.327);
+# a later one never reached the session, so it isn't counted as loaded.
+_AT_MENTION_LIMIT = 100
 _REMINDER = re.compile(r"<system-reminder>.*?</system-reminder>", re.S)
 
 
@@ -513,7 +516,8 @@ def loaded_files(sid: str | None) -> list[Path]:
                                     if isinstance(b, dict) and b.get("type") == "text")
                 else:
                     continue
-                for m in _AT_MENTION.finditer(_REMINDER.sub(" ", text)):
+                mentions = _AT_MENTION.finditer(_REMINDER.sub(" ", text))
+                for _, m in zip(range(_AT_MENTION_LIMIT), mentions):
                     found.append((m.group(1), cwd))
     out: list[Path] = []
     seen: set = set()

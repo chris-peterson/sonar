@@ -311,6 +311,18 @@ class LoadedFilesTest(SonarCase):
         self.assertEqual(got, [(self.repo / "b.md").resolve(), self.outside.resolve(),
                                self.mentioned.resolve()])
 
+    def test_only_a_messages_first_100_mentions_count_as_loaded(self):
+        names = [f"m{i}.md" for i in range(sonar._AT_MENTION_LIMIT + 1)]
+        for n in names:
+            (self.repo / n).write_text("x\n")
+        rec = {"type": "user", "cwd": str(self.repo),
+               "message": {"content": " ".join("@" + n for n in names)}}
+        path = self.config / "projects" / "-anything" / "many-mentions.jsonl"
+        path.write_text(json.dumps(rec) + "\n")
+        got = sonar.loaded_files("many-mentions")
+        self.assertEqual(len(got), sonar._AT_MENTION_LIMIT)
+        self.assertNotIn((self.repo / names[-1]).resolve(), got)
+
     def test_unknown_or_missing_session_loads_nothing(self):
         self.assertEqual(sonar.loaded_files("no-such-session"), [])
         self.assertEqual(sonar.loaded_files(None), [])
